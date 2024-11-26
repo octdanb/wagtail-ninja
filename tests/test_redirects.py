@@ -1,4 +1,4 @@
-from test_grapple import BaseGrappleTest
+from test_grapple import BaseWagtailNinjaTest
 from testapp.factories import RedirectFactory
 from testapp.models import BlogPage
 from wagtail.contrib.redirects.models import Redirect
@@ -6,7 +6,7 @@ from wagtail.models import Site
 from wagtail_factories import SiteFactory
 
 
-class TestRedirectQueries(BaseGrappleTest):
+class TestRedirectQueries(BaseWagtailNinjaTest):
     @classmethod
     def setUpTestData(cls) -> None:
         super().setUpTestData()

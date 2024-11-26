@@ -27,8 +27,8 @@ you want to give to GraphQL types (you can usually leave this blank):
 .. code-block:: python
 
     # Grapple Config:
-    GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
-    GRAPPLE = {
+    GRAPHENE = {"SCHEMA": "wagtail_ninja.schema.schema"}
+    WAGTAIL_NINJA = {
         "APPS": ["home"],
     }
 

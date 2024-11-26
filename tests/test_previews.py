@@ -3,7 +3,7 @@ from datetime import date
 from django.test import TestCase
 from testapp.models import BlogPage, HomePage
 
-from grapple.types.pages import get_preview_page
+from src.wagtail_ninja.schemas.pages import get_preview_page
 
 
 class TestUnsavedPagePreview(TestCase):

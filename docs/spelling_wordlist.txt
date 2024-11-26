@@ -1,6 +1,5 @@
 Wagtail
-GraphQL
-Graphene
+Ninja
 Orderable
 Orderables
 bool

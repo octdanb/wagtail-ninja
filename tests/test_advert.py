@@ -1,9 +1,9 @@
 from django.test import RequestFactory, override_settings
-from test_grapple import BaseGrappleTestWithIntrospection
+from test_grapple import BaseWagtailNinjaTestWithIntrospection
 from testapp.factories import AdvertFactory
 
 
-class AdvertTest(BaseGrappleTestWithIntrospection):
+class AdvertTest(BaseWagtailNinjaTestWithIntrospection):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -113,7 +113,7 @@ class AdvertTest(BaseGrappleTestWithIntrospection):
         # Declared with GraphQLString, default field source
         self.assertEqual(advert["extraRichText"], self.richtext_sample_rendered)
 
-        with override_settings(GRAPPLE={"RICHTEXT_FORMAT": "raw"}):
+        with override_settings(WAGTAIL_NINJA={"RICHTEXT_FORMAT": "raw"}):
             executed = self.client.execute(
                 query, variables={"url": self.advert.url}, context_value=self.request
             )

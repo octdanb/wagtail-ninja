@@ -1,9 +1,9 @@
-.. Wagtail Grapple's documentation main file, created by
+.. Wagtail Ninja's documentation main file, created by
    sphinx-quickstart on Tue May 21 19:46:16 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Wagtail Grapple's documentation!
+Welcome to Wagtail Ninja's documentation!
 ===========================================
 
 There is a range of GraphQL packages for Python and specifically Django.

@@ -1,23 +1,21 @@
-import graphene
+# import graphene
 
 from wagtail.models import Page
 
-from grapple.registry import registry
-from grapple.types.interfaces import PageInterface
-from grapple.types.rich_text import RichText
+from wagtail_ninja.registry import registry
+from wagtail_ninja.schemas.interfaces import PageInterface
+from wagtail_ninja.schemas.rich_text import RichText
 from testapp.models import Advert, AuthorPage
 
 
 class CreateAuthor(graphene.Mutation):
     class Arguments:
-        name = graphene.String()
-        parent = graphene.Int()
-        slug = graphene.String()
+        name: str
+        parent: int
+        slug: str
 
-    ok = graphene.Boolean()
-    author = graphene.Field(
-        PageInterface,
-    )
+    ok: bool
+    author: PageInterface
 
     def mutate(root, info, name, parent, slug):
         # We use uuid here in order to ensure the slug will always be unique across tests
@@ -30,8 +28,8 @@ class CreateAuthor(graphene.Mutation):
 
 class CreateAdvert(graphene.Mutation):
     class Arguments:
-        url = graphene.String(required=True)
-        text = graphene.String(required=True)
+        url: str
+        text: str
         rich_text = RichText()
         extra_rich_text = RichText()
 

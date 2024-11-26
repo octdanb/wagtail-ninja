@@ -3,17 +3,17 @@ import sys
 
 import sphinx_wagtail_theme
 
-from grapple import __version__
+from wagtail_ninja import __version__
 
 
-sys.path.insert(0, os.path.abspath("./grapple"))
+sys.path.insert(0, os.path.abspath("./wagtail_ninja"))
 
 
 # -- Project information -----------------------------------------------------
 
-project = "Wagtail Grapple"
-copyright = "2019, Nathan Horrigan. 2020-present Dan Braghis and contributors"
-author = "Nathan Horrigan"
+project = "Wagtail Ninja"
+copyright = "2024, Dan Brosnan"
+author = "Dan Brosnan"
 release = __version__
 version = __version__
 
@@ -35,9 +35,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_wagtail_theme"
 html_theme_path = [sphinx_wagtail_theme.get_html_theme_path()]
 html_theme_options = {
-    "project_name": "Wagtail Grapple Documentation",
-    "github_url": "https://github.com/torchbox/wagtail-grapple/tree/main/docs/",
-    "logo": "img/wagtail-grapple.svg",
+    "project_name": "Wagtail Ninja Documentation",
+    "github_url": "https://github.com/falsaform/wagtail-ninja/tree/main/docs/",
+    "logo": "img/wagtail_ninja.svg",
     "footer_links": "",
 }
 html_last_updated_fmt = "%b %d, %Y"

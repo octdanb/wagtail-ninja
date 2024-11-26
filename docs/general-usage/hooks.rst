@@ -32,7 +32,7 @@ replace or remove any of the default mixins that are not of use in your project:
 
     # your_app/wagtail_hooks.py
     from wagtail import hooks
-    from grapple.types.search import SearchQuery
+    from wagtail_ninja.types.search import SearchQuery
     from .queries import ReplacementQuery
 
 

@@ -2,7 +2,7 @@ from django.db import models
 from wagtail.documents.models import AbstractDocument, Document
 from wagtail.images.models import AbstractImage, AbstractRendition, Image
 
-from grapple.models import GraphQLString
+from src.wagtail_ninja.models import GraphQLString
 
 
 class CustomDocument(AbstractDocument):

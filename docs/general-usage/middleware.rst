@@ -11,7 +11,7 @@ You must enable the GrappleMiddleware for grapple's field level middleware to wo
 
 GrappleMiddleware
 -----------------
-.. module:: grapple.middleware
+.. module:: wagtail_ninja.middleware
 .. class:: GrappleMiddleware(object)
 
 .. code-block:: python
@@ -19,7 +19,7 @@ GrappleMiddleware
     # settings.py
     GRAPHENE = {
         # ...
-        "MIDDLEWARE": ["grapple.middleware.GrappleMiddleware"],
+        "MIDDLEWARE": ["wagtail_ninja.middleware.GrappleMiddleware"],
     }
 
 
@@ -29,7 +29,7 @@ Examples
 
 Authenticated Middleware
 ^^^^^^^^^^^^^^^^^^^^^^^^
-.. module:: grapple.middleware
+.. module:: wagtail_ninja.middleware
 .. class:: IsAuthenticatedMiddleware(object)
 
 This middleware only continues evaluation if the request is authenticated.
@@ -45,7 +45,7 @@ This middleware only continues evaluation if the request is authenticated.
 
 Anonymous Middleware
 ^^^^^^^^^^^^^^^^^^^^
-.. module:: grapple.middleware
+.. module:: wagtail_ninja.middleware
 .. class:: IsAnonymousMiddleware(object)
 
 This middleware only continues evaluation if the request is **not** authenticated.

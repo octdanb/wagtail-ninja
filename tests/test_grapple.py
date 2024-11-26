@@ -16,8 +16,8 @@ from wagtail.documents import get_document_model
 from wagtail.models import Page, Site
 from wagtailmedia.models import get_media_model
 
-from grapple.registry import RegistryItem
-from grapple.schema import create_schema
+from wagtail_ninja.registry import RegistryItem
+from wagtail_ninja.schema import create_schema
 
 
 SCHEMA = locate(settings.GRAPHENE["SCHEMA"])
@@ -27,7 +27,7 @@ MIDDLEWARE_OBJECTS = [
 MIDDLEWARE = [item() if isinstance(item, type) else item for item in MIDDLEWARE_OBJECTS]
 
 
-class BaseGrappleTest(TestCase):
+class BaseWagtailNinjaTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.home = HomePage.objects.first()
@@ -36,7 +36,7 @@ class BaseGrappleTest(TestCase):
         self.client = Client(SCHEMA, middleware=MIDDLEWARE)
 
 
-class BaseGrappleTestWithIntrospection(BaseGrappleTest):
+class BaseWagtailNinjaTestWithIntrospection(BaseWagtailNinjaTest):
     def introspect_schema_for_available_queries(self):
         query = """
         query availableQueries {
@@ -98,21 +98,21 @@ class BaseGrappleTestWithIntrospection(BaseGrappleTest):
         return self.client.execute(query, variables={"type": object_type})
 
 
-class PagesTest(BaseGrappleTest):
+class PagesTest(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.factory = RequestFactory()
         self.blog_post = BlogPageFactory(parent=self.home)
 
         self.site_different_hostname = wagtail_factories.SiteFactory(
-            hostname="grapple-hook.localhost",
-            site_name="Grapple test site (different hostname)",
+            hostname="wagtail-ninja-hook.localhost",
+            site_name="Wagtail Ninja test site (different hostname)",
         )
 
         self.site_different_hostname_different_port = wagtail_factories.SiteFactory(
-            hostname="grapple-hook.localhost",
+            hostname="wagtail-ninja-hook.localhost",
             port=8000,
-            site_name="Grapple test site (different hostname/port)",
+            site_name="Wagtail Ninja site (different hostname/port)",
         )
 
     def test_pages(self):
@@ -142,7 +142,7 @@ class PagesTest(BaseGrappleTest):
         pages = Page.objects.filter(depth__gt=1)
         self.assertEqual(len(executed["data"]["pages"]), pages.count())
 
-    @override_settings(GRAPPLE={"PAGE_SIZE": 1, "MAX_PAGE_SIZE": 1})
+    @override_settings(WAGTAIL_NINJA={"PAGE_SIZE": 1, "MAX_PAGE_SIZE": 1})
     def test_pages_limit(self):
         query = """
         {
@@ -471,7 +471,7 @@ class PagesTest(BaseGrappleTest):
             self.assertEqual(page["depth"], p1_2.depth + 1)
 
 
-class PagesSearchTest(BaseGrappleTest):
+class PagesSearchTest(BaseWagtailNinjaTest):
     @classmethod
     def setUpTestData(cls):
         cls.home = HomePage.objects.first()
@@ -674,7 +674,7 @@ class PagesSearchTest(BaseGrappleTest):
         self.assertEqual(page_data[9]["title"], "Gamma Beta")
 
 
-class PageUrlPathTest(BaseGrappleTest):
+class PageUrlPathTest(BaseWagtailNinjaTest):
     def _query_by_path(self, path, *, in_site=False):
         query = """
         query($urlPath: String, $inSite: Boolean) {
@@ -743,16 +743,16 @@ class PageUrlPathTest(BaseGrappleTest):
 class SitesTest(TestCase):
     def setUp(self):
         self.site = wagtail_factories.SiteFactory(
-            hostname="grapple.localhost", site_name="Grapple test site"
+            hostname="wagtail_ninja.localhost", site_name="Grapple test site"
         )
 
         self.site_different_hostname = wagtail_factories.SiteFactory(
-            hostname="grapple-hook.localhost",
+            hostname="wagtail_ninja-hook.localhost",
             site_name="Grapple test site (different hostname)",
         )
 
         self.site_different_hostname_different_port = wagtail_factories.SiteFactory(
-            hostname="grapple-hook.localhost",
+            hostname="wagtail_ninja-hook.localhost",
             port=8000,
             site_name="Grapple test site (different hostname/port)",
         )
@@ -894,7 +894,7 @@ class SitesTest(TestCase):
             }
         }
         """
-        # grapple test site root page
+        # wagtail_ninja test site root page
         results = self.client.execute(
             query,
             variables={
@@ -930,9 +930,9 @@ class SitesTest(TestCase):
         self.assertEqual(data[0]["contentType"], "testapp.HomePage")
         self.assertEqual(data[0]["title"], self.home.title)
 
-        # Blog page under grapple test site
+        # Blog page under wagtail_ninja test site
         blog = BlogPageFactory(
-            parent=self.site.root_page, title="post on grapple test site"
+            parent=self.site.root_page, title="post on wagtail_ninja test site"
         )
         results = self.client.execute(
             query,
@@ -971,13 +971,13 @@ class SitesTest(TestCase):
             }
         }
         """
-        # Blog page under grapple test site
+        # Blog page under wagtail_ninja test site
         blog = BlogPageFactory(
             parent=self.site.root_page,
-            title="post on grapple test site",
+            title="post on wagtail_ninja test site",
             slug="blog-page-1",
         )
-        # grapple test SiteObjectType page field
+        # wagtail_ninja test SiteObjectType page field
         results = self.client.execute(
             query,
             variables={
@@ -1030,10 +1030,10 @@ class SitesTest(TestCase):
             }
         }
         """
-        # Blog page under grapple test site
+        # Blog page under wagtail_ninja test site
         blog = BlogPageFactory(
             parent=self.site.root_page,
-            title="post on grapple test site",
+            title="post on wagtail_ninja test site",
             slug="blog-page-1",
         )
         results = self.client.execute(
@@ -1083,9 +1083,9 @@ class SitesTest(TestCase):
             }
         }
         """
-        # Blog page under grapple test site
+        # Blog page under wagtail_ninjawagtail_ninja test site
         blog = BlogPageFactory(
-            parent=self.site.root_page, title="post on grapple test site"
+            parent=self.site.root_page, title="post on wagtail_ninja test site"
         )
         results = self.client.execute(
             query,
@@ -1111,7 +1111,7 @@ class SitesTest(TestCase):
         self.assertIsNone(data)
 
 
-@override_settings(GRAPPLE={"AUTO_CAMELCASE": False})
+@override_settings(WAGTAIL_NINJA={"AUTO_CAMELCASE": False})
 class DisableAutoCamelCaseTest(TestCase):
     def setUp(self):
         schema = create_schema()
@@ -1141,7 +1141,7 @@ class DisableAutoCamelCaseTest(TestCase):
         self.assertEqual(len(executed["data"]["pages"]), pages.count())
 
 
-class DocumentsTest(BaseGrappleTest):
+class DocumentsTest(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.document_model = get_document_model()
@@ -1283,7 +1283,7 @@ class DocumentsTest(BaseGrappleTest):
         self.example_document.file.delete()
 
 
-class MediaTest(BaseGrappleTest):
+class MediaTest(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
 
@@ -1340,7 +1340,7 @@ class MediaTest(BaseGrappleTest):
         self.media_item.file.delete()
 
 
-class SettingsTest(BaseGrappleTest):
+class SettingsTest(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
 
@@ -1686,7 +1686,7 @@ class SettingsTest(BaseGrappleTest):
         )
 
 
-class SnippetsTest(BaseGrappleTest):
+class SnippetsTest(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.factory = RequestFactory()
@@ -1695,7 +1695,7 @@ class SnippetsTest(BaseGrappleTest):
 
     def test_snippets(self):
         """
-        Query for snippets of different types, they should all be returned in
+        Query for snippets of different schemas, they should all be returned in
         the same response.
         """
 
@@ -1738,7 +1738,7 @@ class SnippetsTest(BaseGrappleTest):
         }
         """
 
-        with patch("grapple.registry.registry.snippets", RegistryItem()):
+        with patch("wagtail_ninja.registry.registry.snippets", RegistryItem()):
             executed = self.client.execute(query)
 
         self.assertEqual(type(executed["data"]), dict)

@@ -10,8 +10,8 @@ from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from grapple.helpers import register_streamfield_block
-from grapple.models import (
+from wagtail_ninja.helpers import register_streamfield_block
+from src.wagtail_ninja.models import (
     GraphQLBoolean,
     GraphQLCollection,
     GraphQLEmbed,

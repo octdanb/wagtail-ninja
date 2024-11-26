@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.test import override_settings
 from django.test.client import RequestFactory
-from test_grapple import BaseGrappleTest
+from test_grapple import BaseWagtailNinjaTest
 from testapp.blocks import (
     ButtonBlock,
     CarouselBlock,
@@ -29,7 +29,7 @@ from wagtail.embeds.blocks import EmbedValue
 from wagtail.rich_text import RichText
 
 
-class BlogTest(BaseGrappleTest):
+class BlogTest(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         # FIXME: change back to setUpTestData once https://github.com/wagtail/wagtail/issues/9788 is fixed
@@ -239,7 +239,7 @@ class BlogTest(BaseGrappleTest):
                 )
                 count += 1
 
-        with override_settings(GRAPPLE={"RICHTEXT_FORMAT": "raw"}):
+        with override_settings(WAGTAIL_NINJA={"RICHTEXT_FORMAT": "raw"}):
             query_blocks = self.get_blocks_from_body(block_type, block_query="value")
             count = 0
             for streamfield_block in self.blog_page.body:
@@ -275,7 +275,7 @@ class BlogTest(BaseGrappleTest):
             executed["data"]["page"]["extraSummary"], self.richtext_sample_rendered
         )
 
-        with override_settings(GRAPPLE={"RICHTEXT_FORMAT": "raw"}):
+        with override_settings(WAGTAIL_NINJA={"RICHTEXT_FORMAT": "raw"}):
             executed = self.client.execute(query, variables={"id": self.blog_page.id})
             self.assertEqual(executed["data"]["page"]["summary"], self.richtext_sample)
             self.assertEqual(
@@ -292,7 +292,7 @@ class BlogTest(BaseGrappleTest):
             block_query="""
             image {
                 id
-                src
+                app
             }
             """,
         )
@@ -306,7 +306,7 @@ class BlogTest(BaseGrappleTest):
                     query_blocks[count]["image"]["id"], str(block.value.id)
                 )
                 self.assertEqual(
-                    query_blocks[count]["image"]["src"],
+                    query_blocks[count]["image"]["app"],
                     settings.BASE_URL + block.value.file.url,
                 )
                 # Increment the count
@@ -322,7 +322,7 @@ class BlogTest(BaseGrappleTest):
                 blocks {
                     ...on ImageChooserBlock {
                         image {
-                            src
+                            app
                         }
                     }
                 }
@@ -330,9 +330,9 @@ class BlogTest(BaseGrappleTest):
         )
 
         # Get first image url
-        url = query_blocks[0]["blocks"][0]["image"]["src"]
+        url = query_blocks[0]["blocks"][0]["image"]["app"]
 
-        # Check that src is valid url
+        # Check that app is valid url
         validator = URLValidator()
         try:
             # Run validator, If no exception thrown then we pass test
@@ -350,7 +350,7 @@ class BlogTest(BaseGrappleTest):
                 self.assertIsInstance(html, str)
                 self.assertEqual(html, self.richtext_sample_rendered)
 
-        with override_settings(GRAPPLE={"RICHTEXT_FORMAT": "raw"}):
+        with override_settings(WAGTAIL_NINJA={"RICHTEXT_FORMAT": "raw"}):
             query_blocks = self.get_blocks_from_body(block_type, block_query="text")
             for block in self.blog_page.body:
                 if type(block.block).__name__ == block_type:
@@ -419,7 +419,7 @@ class BlogTest(BaseGrappleTest):
             images {
                 image {
                     id
-                    src
+                    app
                 }
             }
             """,
@@ -439,7 +439,7 @@ class BlogTest(BaseGrappleTest):
                         str(block.value["images"][key].value["image"].id),
                     )
                     self.assertEqual(
-                        image["image"]["src"],
+                        image["image"]["app"],
                         settings.BASE_URL
                         + str(block.value["images"][key].value["image"].file.url),
                     )
@@ -499,7 +499,7 @@ class BlogTest(BaseGrappleTest):
             "thumbnail_url": "https://i.ytimg.com/vi/_U79Wc965vw/hqdefault.jpg",
             "width": 200,
             "height": 113,
-            "html": '<iframe width="200" height="113" src="https://www.youtube.com/embed/_U79Wc965vw?feature=oembed" '
+            "html": '<iframe width="200" height="113" app="https://www.youtube.com/embed/_U79Wc965vw?feature=oembed" '
             'frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; '
             'picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen '
             'title="Wagtail Space 2018"></iframe>',
@@ -624,7 +624,7 @@ class BlogTest(BaseGrappleTest):
             block["snippet"]["extraRichText"], self.richtext_sample_rendered
         )
 
-        with override_settings(GRAPPLE={"RICHTEXT_FORMAT": "raw"}):
+        with override_settings(WAGTAIL_NINJA={"RICHTEXT_FORMAT": "raw"}):
             query_blocks = self.get_blocks_from_body(
                 block_type, block_query=block_query, page_id=blog_page.id
             )
@@ -1047,19 +1047,19 @@ class BlogTest(BaseGrappleTest):
 
     def test_streamfield_callable_resolver_using_graphqlinfo(self):
         site_two = wagtail_factories.SiteFactory(
-            hostname="grapple.localhost", site_name="Grapple test site", port=80
+            hostname="wagtail_ninja.localhost", site_name="Grapple test site", port=80
         )
 
         slug = self.blog_page.slug
         site_two_post = BlogPageFactory(
             parent=site_two.root_page,
-            title="post on grapple test site",
+            title="post on wagtail_ninjawagtail_ninja test site",
             slug=slug,  # same slug as self.blog_page which is on the default site
         )
 
         the_post = BlogPageFactory(
             parent=site_two.root_page,
-            title="the blog post on grapple test site",
+            title="the blog post on wagtail_ninja test site",
             slug="the-blog-post",
             body=[
                 (
@@ -1099,7 +1099,7 @@ class BlogTest(BaseGrappleTest):
         data = results["data"]["site"]["page"]
         self.assertEqual(data["title"], the_post.title)
         self.assertEqual(
-            data["body"][0]["linkUrl"], f"http://grapple.localhost/{slug}/"
+            data["body"][0]["linkUrl"], f"http://wagtail_ninja.localhost/{slug}/"
         )
         # expeting the full url since we are not passing the request context
         self.assertEqual(data["body"][1]["linkUrl"], f"http://localhost/{slug}/")
@@ -1113,7 +1113,7 @@ class BlogTest(BaseGrappleTest):
         data = results["data"]["site"]["page"]
         self.assertEqual(data["title"], the_post.title)
         self.assertEqual(
-            data["body"][0]["linkUrl"], f"http://grapple.localhost/{slug}/"
+            data["body"][0]["linkUrl"], f"http://wagtail_ninja.localhost/{slug}/"
         )
         self.assertEqual(data["body"][1]["linkUrl"], f"/{slug}/")
 

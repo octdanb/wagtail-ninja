@@ -1,4 +1,4 @@
-GraphQL Types
+Schemas
 =============
 
 Each of the field types in last chapter correspond to an outputted GraphQL

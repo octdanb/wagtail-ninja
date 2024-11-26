@@ -1,14 +1,13 @@
 import wagtail_factories
 
 from django.test import TestCase
-from graphql import GraphQLError
 
-from grapple.utils import resolve_site_by_hostname, resolve_site_by_id
+from wagtail_ninja.utils import resolve_site_by_hostname, resolve_site_by_id
 
 
 class TestResolveSiteById(TestCase):
     """
-    Test suite for the `grapple.utils.resolve_site_by_id()` utility method.
+    Test suite for the `wagtail_ninja.utils.resolve_site_by_id()` utility method.
     """
 
     def test_success_with_id(self):
@@ -36,7 +35,7 @@ class TestResolveSiteById(TestCase):
 
 class TestResolveSiteByHostname(TestCase):
     """
-    Test suite for the `grapple.utils.resolve_site_by_hostname()` utility
+    Test suite for the `wagtail_ninja.utils.resolve_site_by_hostname()` utility
     method.
     """
 
@@ -90,7 +89,7 @@ class TestResolveSiteByHostname(TestCase):
 
     def test_graphqlerror_when_hostname_is_ambiguous(self):
         """
-        Ensure a `GraphQLError` is returned when passing an ambiguous
+        Ensure a `Exception` is returned when passing an ambiguous
         `hostname`.
         """
 
@@ -98,7 +97,7 @@ class TestResolveSiteByHostname(TestCase):
         wagtail_factories.SiteFactory(hostname="example.com", port="2000")
 
         with self.assertRaisesRegex(
-            GraphQLError, "Try including a port number to disambiguate"
+            Exception, "Try including a port number to disambiguate"
         ):
             resolve_site_by_hostname(
                 hostname="example.com",

@@ -12,7 +12,7 @@ and take advantage of Grapple's generic ``GraphQLField`` type.
 
 GraphQLField
 -------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLField(field_name: str, field_type: type = None, required=None, **kwargs)
 
     .. attribute:: field_name (str)
@@ -63,7 +63,7 @@ GraphQLField
 
 GraphQLString
 -------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLString(field_name, required=False, **kwargs)
 
     A basic field type is string. Commonly used for CharField, TextField,
@@ -113,7 +113,7 @@ GraphQLString
 
     .. code-block:: python
 
-        from grapple.types import GraphQLString
+        from wagtail_ninja.types import GraphQLString
 
 
         class BlogPage(Page):
@@ -137,7 +137,7 @@ GraphQLString
 
 GraphQLCollection
 -----------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLCollection(nested_type, field_name, *args, is_queryset=False, is_paginated_queryset=False, required=False, item_required=False, **kwargs)
 
     A field type that wraps another model type in a list. Best suited for referencing Orderables (i.e. ForeignKey lists).
@@ -184,7 +184,7 @@ GraphQLCollection
 
     .. code-block:: python
 
-        from grapple.types import GraphQLString
+        from wagtail_ninja.types import GraphQLString
 
 
         class BlogPage(Page):
@@ -239,7 +239,7 @@ GraphQLCollection
 
 GraphQLInt
 ----------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLInt(field_name, required=False, **kwargs)
 
     Used to serialize integer-based Django fields such as ``IntegerField``
@@ -288,7 +288,7 @@ GraphQLInt
 
 GraphQLFloat
 ------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLFloat(field_name, required=False, **kwargs)
 
     Like ``GraphQLInt``, this field is used to serialize ``Float`` and ``Decimal`` fields.
@@ -336,7 +336,7 @@ GraphQLFloat
 
 GraphQLBoolean
 --------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLBoolean(field_name, required=False, **kwargs)
 
     Used to serialize ``Boolean`` fields.
@@ -384,7 +384,7 @@ GraphQLBoolean
 
 GraphQLStreamfield
 ------------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLStreamfield(field_name, **kwargs)
 
     This field type supports all built-in ``Streamfield`` blocks. It also supports
@@ -471,7 +471,7 @@ GraphQLStreamfield
 
 GraphQLSnippet
 --------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLSnippet(field_name, snippet_model, required=False)
 
     ``GraphQLSnippet`` is a little bit more complicated; You first need to define
@@ -550,7 +550,7 @@ GraphQLSnippet
 
 GraphQLForeignKey
 -----------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLForeignKey(field_name, content_type, required=False)
 
     ``GraphQLForeignKey`` is similar to ``GraphQLSnippet`` in that you pass a
@@ -592,7 +592,7 @@ GraphQLForeignKey
 GraphQLImage
 ------------
 
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLImage(field_name, required=False)
 
     Use this field type to serialize the core Wagtail or your custom Image model.
@@ -619,7 +619,7 @@ GraphQLImage
 GraphQLDocument
 ---------------
 
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLDocument(field_name, required=False)
 
     Use this field type to serialize the core Wagtail or your custom Document model.
@@ -646,7 +646,7 @@ GraphQLDocument
 GraphQLPage
 -----------
 
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLPage(field_name: str, **kwargs)
 
     Use this field type to serialize a relationship to a Wagtail Page or Page-derived model. The resulting type
@@ -681,7 +681,7 @@ GraphQLPage
 GraphQLTag
 -----------
 
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLTag(field_name: str, **kwargs)
 
     Use this field type to serialize a ``ClusterTaggableManager`` field.
@@ -709,7 +709,7 @@ GraphQLTag
 
 GraphQLRichText
 ---------------
-.. module:: grapple.models
+.. module:: wagtail_ninja.models
 .. class:: GraphQLRichText(field_name, required=False, **kwargs)
 
     Use this field type to serialize ``RichTextField`` and ``RichTextBlock`` values. If your :ref:`RICHTEXT_FORMAT<rich text settings>` setting is ``"html"``, the stored value will be transformed from the internal representation to proper html. If set to ``"raw"``, the raw internal representation will be returned.

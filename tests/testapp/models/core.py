@@ -18,13 +18,13 @@ from wagtail.snippets.models import register_snippet
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtailmedia.edit_handlers import MediaChooserPanel
 
-from grapple.helpers import (
+from wagtail_ninja.helpers import (
     register_paginated_query_field,
     register_query_field,
     register_singular_query_field,
 )
-from grapple.middleware import IsAnonymousMiddleware
-from grapple.models import (
+from wagtail_ninja.middleware import IsAnonymousMiddleware
+from src.wagtail_ninja.models import (
     GraphQLCollection,
     GraphQLDocument,
     GraphQLField,
@@ -38,7 +38,7 @@ from grapple.models import (
     GraphQLString,
     GraphQLTag,
 )
-from grapple.utils import resolve_paginated_queryset
+from wagtail_ninja.utils import resolve_paginated_queryset
 from testapp.blocks import StreamFieldBlock
 from testapp.interfaces import AdditionalInterface
 

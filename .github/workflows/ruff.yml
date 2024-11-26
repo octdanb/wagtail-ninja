@@ -19,4 +19,4 @@ jobs:
     - run: python -Im pip install --user ruff==0.4.10
 
     - name: Run ruff
-      run: ruff --output-format=github grapple
+      run: ruff --output-format=github wagtail_ninja

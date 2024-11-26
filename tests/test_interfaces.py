@@ -3,11 +3,11 @@ import os
 from unittest import skipIf, skipUnless
 
 from django.test import override_settings, tag
-from test_grapple import BaseGrappleTestWithIntrospection
+from test_grapple import BaseWagtailNinjaTestWithIntrospection
 from testapp.factories import AdditionalInterfaceBlockFactory, BlogPageFactory
 from testapp.interfaces import CustomPageInterface, CustomSnippetInterface
 
-from grapple.types.interfaces import (
+from wagtail_ninja.schemas.interfaces import (
     PageInterface,
     get_page_interface,
     get_snippet_interface,
@@ -18,7 +18,7 @@ from grapple.types.interfaces import (
     os.getenv("DJANGO_SETTINGS_MODULE") == "settings_custom_interfaces",
     "Cannot run with settings_custom_interfaces",
 )
-class InterfacesTestCase(BaseGrappleTestWithIntrospection):
+class InterfacesTestCase(BaseWagtailNinjaTestWithIntrospection):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -40,13 +40,13 @@ class InterfacesTestCase(BaseGrappleTestWithIntrospection):
         )
 
     @override_settings(
-        GRAPPLE={"PAGE_INTERFACE": "testapp.interfaces.CustomPageInterface"}
+        WAGTAIL_NINJA={"PAGE_INTERFACE": "testapp.interfaces.CustomPageInterface"}
     )
     def test_get_page_interface_with_custom_page_interface(self):
         self.assertIs(get_page_interface(), CustomPageInterface)
 
     @override_settings(
-        GRAPPLE={"SNIPPET_INTERFACE": "testapp.interfaces.CustomSnippetInterface"}
+        WAGTAIL_NINJA={"SNIPPET_INTERFACE": "testapp.interfaces.CustomSnippetInterface"}
     )
     def test_get_snippet_interface_with_custom_page_interface(self):
         self.assertIs(get_snippet_interface(), CustomSnippetInterface)
@@ -112,7 +112,7 @@ class InterfacesTestCase(BaseGrappleTestWithIntrospection):
     os.getenv("DJANGO_SETTINGS_MODULE") == "settings_custom_interfaces",
     "Needs settings_custom_interfaces",
 )
-class CustomInterfacesTestCase(BaseGrappleTestWithIntrospection):
+class CustomInterfacesTestCase(BaseWagtailNinjaTestWithIntrospection):
     def test_schema_with_custom_page_interface(self):
         results = self.introspect_schema_by_type("BlogPage")
         self.assertListEqual(

@@ -13,7 +13,7 @@ Wagtail docs:
 
 .. code-block:: python
 
-    from grapple.models import (
+    from wagtail_ninja.models import (
         GraphQLRichText,
         GraphQLString,
         GraphQLStreamfield,

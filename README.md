@@ -1,37 +1,32 @@
 <p align="center">
-  <a href="https://github.com/torchbox/wagtail-grapple">
-    <img src="https://github.com/torchbox/wagtail-grapple/raw/main/.github/wagtail-grapple.svg?sanitize=true" alt="A red g with a grapple hook" width="80" height="80">
+  <a href="https://github.com/falsaform/wagtail-ninja">
+    <img src="https://github.com/falsaform/wagtail-ninja/raw/main/.github/wagtail-wagtail_ninja.svg?sanitize=true" alt="A ninja bird" width="80" height="80">
   </a>
 </p>
 
-# Wagtail Grapple
+# Wagtail Ninja
 
 [![Build status](https://github.com/torchbox/wagtail-grapple/actions/workflows/ci.yml/badge.svg)](https://github.com/torchbox/wagtail-grapple/actions)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![PyPi](https://img.shields.io/pypi/v/wagtail-grapple.svg)](https://pypi.org/project/wagtail-grapple/)
+[![PyPi](https://img.shields.io/pypi/v/wagtail-wagtail_ninja.svg)](https://pypi.org/project/wagtail-grapple/)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/torchbox/wagtail-grapple/main.svg)](https://results.pre-commit.ci/latest/github/torchbox/wagtail-grapple/main)
 
 A library to build GraphQL endpoints easily so you can grapple your Wagtail data from anywhere!
 
-[Explore the docs »](https://wagtail-grapple.readthedocs.io/en/latest/) ·
+[Explore the docs »](https://wagtail-wagtail_ninja.readthedocs.io/en/latest/) ·
 [Report Bug](https://github.com/torchbox/wagtail-grapple/issues) ·
 [Request Feature](https://github.com/torchbox/wagtail-grapple/issues)
 
 ## About The Project
 
-There is a range of GraphQL packages for Python and specifically Django.
-However, getting these packages to work out of the box with an existing infrastructure
-without errors isn't as easy to come by.
+Headless wagtail is a pain, adding an openapi spec and ninja api should help frontend libraries access wagtail content easier 
 
-The purpose of Grapple is to be able to build GraphQL endpoints on a model by model
-basis as quickly as possible. The setup and configuration have been designed
-to be as simple but also provide the best features;
-No complex serializers need to be written - just add a `graphql_fields` list
+No complex serializers need to be written - just add a `wagtail_ninja_fields` list
 to your model and away you go (although if you want to go deeper you can!).
 
 ### Features
 
--   Easily create GraphQL types by adding a small annotation in your models.
+-   Easily create wagtail ninja types by adding a small annotation in your models.
 -   Supports traditional Wagtail models:
     -   Pages (including StreamField & Orderables)
     -   Snippets
@@ -47,14 +42,11 @@ to your model and away you go (although if you want to go deeper you can!).
 
 ### Built With
 
-This library is an abstraction upon and relies heavily on Graphene & Graphene Django.
-
--   [Graphene](https://github.com/graphql-python/graphene)
--   [Graphene Django](https://github.com/graphql-python/graphene)
+This library is an abstraction upon and relies heavily on Ninja, Ninja Extra & Pydantic
 
 ## Getting Started
 
-Getting Grapple installed is designed to be as simple as possible!
+Getting Wagtail Ninja installed is designed to be as simple as possible!
 
 ### Prerequisites
 
@@ -69,7 +61,7 @@ Django >= 4.2
 Install using pip
 
 ```bash
-python -m pip install wagtail_grapple
+python -m pip install wagtail_ninja
 ```
 
 Add the following to the `INSTALLED_APPS` list in your Wagtail settings file:
@@ -77,8 +69,7 @@ Add the following to the `INSTALLED_APPS` list in your Wagtail settings file:
 ```python
 INSTALLED_APPS = [
     # ...
-    "grapple",
-    "graphene_django",
+    "wagtail_ninja",
     # ...
 ]
 ```
@@ -87,36 +78,35 @@ Add the following to the bottom of the same settings file, where each key is the
 
 ```python
 # Grapple config:
-GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
-GRAPPLE = {
+WAGTAIL_NINJA = {
     "APPS": ["home"],
 }
 ```
 
-Add the GraphQL URLs to your `urls.py`:
+Add the wagtail ninja URLs to your `urls.py`:
 
 ```python
 from django.urls import include, path
-from grapple import urls as grapple_urls
+from wagtail_ninja import urls as wagtail_ninja_urls
 
 # ...
 urlpatterns = [
     # ...
-    path("api/", include(grapple_urls)),
+    path("api/", include(wagtail_ninja_urls)),
     # ...
 ]
 ```
 
 Done! Now you can proceed onto configuring your models to generate GraphQL types that adopt their structure :tada:
-_Your GraphQL endpoint is available at [http://localhost:8000/api/graphql/](http://localhost:8000/api/graphql/)_
+_Your Openapi spec and endpoints are available at [http://localhost:8000/api/wagtail_ninja/docs](http://localhost:8000/api/graphql/)_
 
 ## Usage
 
-Here is a GraphQL model configuration for the default page from the Wagtail docs:
+Here is a model configuration for the default page from the Wagtail docs:
 
 ```python
 # ...
-from grapple.models import GraphQLString, GraphQLStreamfield
+from src.wagtail_ninja.models import GraphQLString, GraphQLStreamfield
 
 
 class BlogPage(Page):
@@ -137,7 +127,7 @@ class BlogPage(Page):
     ]
 
     # Note these fields below:
-    graphql_fields = [
+    wagtail_ninja_fields = [
         GraphQLString("heading"),
         GraphQLString("date"),
         GraphQLString("author"),
@@ -145,7 +135,7 @@ class BlogPage(Page):
     ]
 ```
 
-_For more examples, please refer to the [Documentation](https://wagtail-grapple.readthedocs.io/en/latest/)_
+_For more examples, please refer to the [Documentation](https://wagtail-wagtail_ninja.readthedocs.io/en/latest/)_
 
 ## Contributing
 
@@ -179,7 +169,7 @@ Any contributions [you make](https://github.com/torchbox/wagtail-grapple/graphs/
 
 ## Compatibility
 
-Wagtail Grapple supports:
+Wagtail Ninja supports:
 
 -   Python 3.8, 3.9, 3.10 3.11 and 3.12
 -   Wagtail >= 5.2
@@ -191,6 +181,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- ACKNOWLEDGEMENTS -->
 
 ## Inspired by
-
--   [@tr11](https://github.com/tr11)
--   [@tmkn](https://github.com/tmkn)
+- wagtail_grapple

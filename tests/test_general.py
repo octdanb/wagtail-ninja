@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, override_settings
-from test_grapple import BaseGrappleTest
+from test_grapple import BaseWagtailNinjaTest
 from testapp.factories import (
     AdvertFactory,
     BlogPageFactory,
@@ -21,7 +21,7 @@ class AuthenticatedUser(AnonymousUser):
         return True
 
 
-class TestRegisterSingularQueryField(BaseGrappleTest):
+class TestRegisterSingularQueryField(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.factory = RequestFactory()
@@ -75,7 +75,7 @@ class TestRegisterSingularQueryField(BaseGrappleTest):
         self.assertEqual(int(results["data"]["simpleModel"]["id"]), instance.id)
 
 
-class TestRegisterQueryField(BaseGrappleTest):
+class TestRegisterQueryField(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.factory = RequestFactory()
@@ -166,7 +166,7 @@ class TestRegisterQueryField(BaseGrappleTest):
         self.assertEqual(results["data"]["middlewareModel"], None)
 
 
-class TestRegisterPaginatedQueryField(BaseGrappleTest):
+class TestRegisterPaginatedQueryField(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.factory = RequestFactory()
@@ -238,7 +238,7 @@ class TestRegisterPaginatedQueryField(BaseGrappleTest):
         self.assertEqual(len(data["items"]), 1)
         self.assertEqual(int(data["pagination"]["totalPages"]), 3)
 
-    @override_settings(GRAPPLE={"PAGE_SIZE": 2})
+    @override_settings(WAGTAIL_NINJA={"PAGE_SIZE": 2})
     def test_paginated_query_field_plural_default_per_page(self):
         query = """
         {
@@ -259,7 +259,7 @@ class TestRegisterPaginatedQueryField(BaseGrappleTest):
         self.assertEqual(int(data["pagination"]["perPage"]), 2)
         self.assertEqual(int(data["pagination"]["totalPages"]), 2)
 
-    @override_settings(GRAPPLE={"MAX_PAGE_SIZE": 3})
+    @override_settings(WAGTAIL_NINJA={"MAX_PAGE_SIZE": 3})
     def test_paginated_query_field_plural_default_max_per_page(self):
         query = """
         {
@@ -281,7 +281,7 @@ class TestRegisterPaginatedQueryField(BaseGrappleTest):
         self.assertEqual(int(data["pagination"]["totalPages"]), 1)
 
 
-class TestRegisterMutation(BaseGrappleTest):
+class TestRegisterMutation(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.blog_post = BlogPageFactory(parent=self.home, slug="post-one")
@@ -330,7 +330,7 @@ class TestRegisterMutation(BaseGrappleTest):
         self.assertEqual(data["author"]["slug"], self.slug)
 
 
-class TestUtils(BaseGrappleTest):
+class TestUtils(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         BlogPageFactory(parent=self.home, title="Test post 1", slug="post-one")
@@ -352,19 +352,19 @@ class TestUtils(BaseGrappleTest):
         return results["data"]["pages"]
 
     def test_page_size_is_default_limit(self):
-        with override_settings(GRAPPLE={"PAGE_SIZE": 3, "MAX_PAGE_SIZE": 8}):
+        with override_settings(WAGTAIL_NINJA={"PAGE_SIZE": 3, "MAX_PAGE_SIZE": 8}):
             pages = self._query_pages()
         self.assertEqual(len(pages), 3)
 
     def test_limit_supercedes_page_size(self):
-        with override_settings(GRAPPLE={"PAGE_SIZE": 3, "MAX_PAGE_SIZE": 8}):
+        with override_settings(WAGTAIL_NINJA={"PAGE_SIZE": 3, "MAX_PAGE_SIZE": 8}):
             pages = self._query_pages(5)
         self.assertEqual(len(pages), 3)
 
     def test_max_page_size_supercedes_page_size(self):
         # the max page size is 1 and we should get only one,
         # even if default page size and the requested limit are higher
-        with override_settings(GRAPPLE={"PAGE_SIZE": 10, "MAX_PAGE_SIZE": 1}):
+        with override_settings(WAGTAIL_NINJA={"PAGE_SIZE": 10, "MAX_PAGE_SIZE": 1}):
             pages = self._query_pages(None)
 
         self.assertEqual(len(pages), 1)
@@ -372,7 +372,7 @@ class TestUtils(BaseGrappleTest):
 
     def test_max_page_size_supercedes_limit(self):
         # Default page size is one, but we ask for two which is still less than max page size
-        with override_settings(GRAPPLE={"PAGE_SIZE": 1, "MAX_PAGE_SIZE": 2}):
+        with override_settings(WAGTAIL_NINJA={"PAGE_SIZE": 1, "MAX_PAGE_SIZE": 2}):
             pages = self._query_pages(5)
         self.assertEqual(len(pages), 2)
         self.assertEqual(pages[0]["title"], "Test post 1")
@@ -388,7 +388,7 @@ class TestUtils(BaseGrappleTest):
         self.assertEqual(pages[1]["title"], "Test post 3")
 
 
-class TestRichTextType(BaseGrappleTest):
+class TestRichTextType(BaseWagtailNinjaTest):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -448,7 +448,7 @@ class TestRichTextType(BaseGrappleTest):
         )
 
 
-class TestFieldMiddleware(BaseGrappleTest):
+class TestFieldMiddleware(BaseWagtailNinjaTest):
     def setUp(self):
         super().setUp()
         self.blog_post = BlogPageFactory(parent=self.home, slug="post-one")

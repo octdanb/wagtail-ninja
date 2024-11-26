@@ -1,21 +1,21 @@
 import wagtail_factories
 
 from django.test import override_settings
-from test_grapple import BaseGrappleTestWithIntrospection
+from test_grapple import BaseWagtailNinjaTestWithIntrospection
 from wagtail.images import get_image_model
 from wagtail.images.tests.utils import get_test_image_file_svg
 
-from grapple.types.images import rendition_allowed
+from src.wagtail_ninja.schemas.images import rendition_allowed
 
 
 Image = get_image_model()
 
 
-class ImageTypesTest(BaseGrappleTestWithIntrospection):
+class ImageTypesTest(BaseWagtailNinjaTestWithIntrospection):
     @classmethod
     def setUpTestData(cls):
         cls.example_image = wagtail_factories.ImageFactory(
-            title="Example Image", file__filename="grapple-test.png"
+            title="Example Image", file__filename="wagtail_ninja-test.png"
         )
 
     def tearDown(self) -> None:
@@ -33,7 +33,7 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
             images {
                 id
                 url
-                src
+                app
             }
         }
         """
@@ -45,7 +45,7 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
             data[0]["url"],
             "http://localhost:8000" + self.example_image.file.url,
         )
-        self.assertEqual(data[0]["url"], data[0]["src"])
+        self.assertEqual(data[0]["url"], data[0]["app"])
 
     def test_query_rendition_url_field(self):
         query = """
@@ -86,7 +86,7 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
             executed["data"]["image"]["rendition"]["customRenditionProperty"],
         )
 
-    @override_settings(GRAPPLE={"ALLOWED_IMAGE_FILTERS": ["width-200"]})
+    @override_settings(WAGTAIL_NINJA={"ALLOWED_IMAGE_FILTERS": ["width-200"]})
     def test_renditions_with_allowed_image_filters_restrictions(self):
         def get_query(**kwargs):
             params = ",".join([f"{key}: {value}" for key, value in kwargs.items()])
@@ -115,7 +115,7 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
         self.assertIsNotNone(data["rendition"])
         self.assertIn("width-200", data["rendition"]["url"])
 
-    @override_settings(GRAPPLE={"ALLOWED_IMAGE_FILTERS": ["width-200"]})
+    @override_settings(WAGTAIL_NINJA={"ALLOWED_IMAGE_FILTERS": ["width-200"]})
     def test_src_set(self):
         query = """
         query ($id: ID!) {
@@ -166,7 +166,7 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
         self.assertEqual(len(results["errors"]), 1)
         self.assertIn("Format must be one of: jpeg", results["errors"][0]["message"])
 
-    @override_settings(GRAPPLE={"ALLOWED_IMAGE_FILTERS": ["width-200"]})
+    @override_settings(WAGTAIL_NINJA={"ALLOWED_IMAGE_FILTERS": ["width-200"]})
     def test_src_set_disallowed_filter(self):
         query = """
         query ($id: ID!) {
@@ -178,7 +178,7 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
         results = self.client.execute(query, variables={"id": self.example_image.id})
         self.assertEqual("", results["data"]["image"]["srcSet"])
 
-    @override_settings(GRAPPLE={"ALLOWED_IMAGE_FILTERS": ["width-200|format-webp"]})
+    @override_settings(WAGTAIL_NINJA={"ALLOWED_IMAGE_FILTERS": ["width-200|format-webp"]})
     def test_src_set_allowed_filter(self):
         query = """
         query ($id: ID!) {
@@ -192,11 +192,11 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
 
     def test_rendition_allowed_method(self):
         self.assertTrue(rendition_allowed("width-100"))
-        with override_settings(GRAPPLE={"ALLOWED_IMAGE_FILTERS": ["width-200"]}):
+        with override_settings(WAGTAIL_NINJA={"ALLOWED_IMAGE_FILTERS": ["width-200"]}):
             self.assertFalse(rendition_allowed("width-100"))
             self.assertTrue(rendition_allowed("width-200"))
 
-        with override_settings(GRAPPLE={"ALLOWED_IMAGE_FILTERS": []}):
+        with override_settings(WAGTAIL_NINJA={"ALLOWED_IMAGE_FILTERS": []}):
             self.assertFalse(rendition_allowed("width-100"))
             self.assertFalse(rendition_allowed("fill-100x100"))
 
@@ -225,13 +225,13 @@ class ImageTypesTest(BaseGrappleTestWithIntrospection):
             self.client.execute(query)
 
 
-class ImageTypesTestWithSVG(BaseGrappleTestWithIntrospection):
+class ImageTypesTestWithSVG(BaseWagtailNinjaTestWithIntrospection):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
         cls.example_svg_image = wagtail_factories.ImageFactory(
             title="Example SVG Image",
-            file=get_test_image_file_svg(filename="grapple-test.svg"),
+            file=get_test_image_file_svg(filename="wagtail_ninja-ninja-test.svg"),
         )
 
     def tearDown(self) -> None:
@@ -300,7 +300,7 @@ class ImageTypesTestWithSVG(BaseGrappleTestWithIntrospection):
         )
         self.assertTrue(
             results["data"]["image"]["rendition"]["url"].endswith(
-                "grapple-test.width-150.svg"
+                "wagtail_ninjatest.width-150.svg"
             )
         )
 
@@ -319,7 +319,7 @@ class ImageTypesTestWithSVG(BaseGrappleTestWithIntrospection):
         self.assertTrue(
             results["data"]["image"]["srcSet"]
             .split()[0]
-            .endswith("grapple-test.width-100.svg")
+            .endswith("wagtail_ninjatest.width-100.svg")
         )
 
     def test_svg_rendition_with_raster_format_without_preserve_svg(self):
@@ -375,6 +375,6 @@ class ImageTypesTestWithSVG(BaseGrappleTestWithIntrospection):
         )
         self.assertTrue(
             results["data"]["image"]["rendition"]["url"].endswith(
-                "grapple-test.original.svg"
+                "wagtail_ninjatest.original.svg"
             )
         )

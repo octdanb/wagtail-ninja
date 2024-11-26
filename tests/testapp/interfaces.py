@@ -1,6 +1,6 @@
 import graphene
 
-from grapple.types.interfaces import PageInterface, SnippetInterface
+from wagtail_ninja.schemas.interfaces import PageInterface, SnippetInterface
 
 
 class AdditionalInterface(graphene.Interface):

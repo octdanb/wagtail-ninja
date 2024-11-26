@@ -1,18 +1,71 @@
+###############################################################################
+# In this section we define common configuration blocks (yaml 'anchors'), that are used in docker service definitions bellow.
+# Read more about 'anchors', 'aliases' and 'merge' in https://yaml.org/spec/1.2.2/#anchors-and-aliases and https://yaml.org/type/merge.html
+# "x-<name>" is treated as an extension https://github.com/compose-spec/compose-spec/blob/master/spec.md#extension section by Docker
+# and therefore configuration defined here isn't acted upon by docker compose runtime.
 
-version: "3.8"
+x-traefik-networks: &traefik-networks
+  networks:
+    - default
+    - traefik_network
 
-volumes:
-  postgres-data:
 
 services:
-  # a postgres container for providing database access.
-  postgres:
-    image: postgres:14
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      # make available on host so runserver running locally can connect.
-      - "5432:5432"
+  django:
+    <<: *traefik-networks
+    platform: linux/amd64
+    hostname: wagtail-ninja-django
+    build:
+      dockerfile: Dockerfile
+      target: dev # dev/staging/production
+      args:
+        - "UID=${UID:-1000}"
+        - "GID=${GID:-1000}"
+    stdin_open: true
+    tty: true
+    command: bash
+    entrypoint: sh -c
+    depends_on:
+      - postgres
+      - redis
     volumes:
-      - postgres-data:/var/lib/postgresql
+      - ./:/wagtail_ninja
+      - ./development/:/development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wagtail-ninja-dev.rule=Host(`wagtail-ninja.dev.octave.nz`)"
+      - "traefik.http.services.wagtail-ninja-dev.loadbalancer.server.port=80"
+      - "traefik.http.routers.wagtail-ninja-dev.entrypoints=http, https"
+    env_file:
+      - .env
+
+  postgres:
+    <<: *traefik-networks
+    hostname: wagtail-ninja-postgres
+    image: postgres:16
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    labels:
+    - "traefik.enable=true"
+    - "traefik.tcp.routers.sbs-wealth-web-app-postgres.tls=true"
+    - "traefik.tcp.routers.sbs-wealth-web-app-postgres.rule=HostSNI(`sbs-wealth-web-app-postgres.dev.octave.nz`)"
+    - "traefik.tcp.services.sbs-wealth-web-app-postgres.loadbalancer.server.port=5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-wagtail_ninja}
+      POSTGRES_USER: ${POSTGRES_USER:-wagtail_ninja}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wagtail_ninja}
+    env_file:
+      - .env
+
+  redis:
+    <<: *traefik-networks
+    hostname: sbs-wealth-web-app-redis
+    image: redis/redis-stack:latest
+
+volumes:
+  postgres:
+
+networks:
+  default:
+  traefik_network:
+    external: true

@@ -1,14 +1,14 @@
 Settings
 ========
 
-The Wagtail Grapple configuration is contained inside a single Django setting - ``GRAPPLE``.
+The Wagtail Ninja configuration is contained inside a single Django setting - ``WAGTAIL_NINJA``.
 
 For example, your project's ``settings.py`` file might include something like this:
 
 .. code-block:: python
 
     # settings.py
-    GRAPPLE = {
+    WAGTAIL_NINJA = {
         "APPS": ["home"],
         "ADD_SEARCH_HIT": True,
         # ...
@@ -18,11 +18,11 @@ For example, your project's ``settings.py`` file might include something like th
 Accessing settings
 ------------------
 
-To access any Wagtail Grapple setting in your code, use the ``grapple_settings`` object. For example.
+To access any Wagtail Ninja setting in your code, use the ``grapple_settings`` object. For example.
 
 .. code-block:: python
 
-    from grapple.settings import grapple_settings
+    from wagtail_ninja.settings import grapple_settings
 
     print(grapple_settings.APPS)
 
@@ -49,19 +49,9 @@ Default: ``[]``
 ******************
 
 By default, all field and argument names will be converted from `snake_case` to `camelCase`.
-To disable this behavior, set the ``GRAPPLE['AUTO_CAMELCASE']`` setting to `False`.
+To disable this behavior, set the ``WAGTAIL_NINJA['AUTO_CAMELCASE']`` setting to `False`.
 
 Default: ``True``
-
-
-``EXPOSE_GRAPHIQL``
-*******************
-
-By default, Grapple will add ``/graphql`` URL to where you can make GET/POST GraphQL requests.
-When ``GRAPPLE['EXPOSE_GRAPHIQL']`` is set to ``True``, the ``/graphiql`` URL is also added to
-provide access to the GraphiQL user interface.
-
-Default: ``False``
 
 
 Renditions settings
@@ -70,7 +60,7 @@ Renditions settings
 ``ALLOWED_IMAGE_FILTERS``
 *************************
 
-To prevent arbitrary renditions from being generated, set ``GRAPPLE['ALLOWED_IMAGE_FILTERS']`` in
+To prevent arbitrary renditions from being generated, set ``WAGTAIL_NINJA['ALLOWED_IMAGE_FILTERS']`` in
 your settings to a `list` or `tuple` of allowed filters. Read more about generating renditions in the Wagtail docs
 (`Generating renditions in Python <https://docs.wagtail.io/en/stable/advanced_topics/images/renditions.html#generating-renditions-in-python>`_ and
 `How to use images in templates <https://docs.wagtail.io/en/stable/topics/images.html#how-to-use-images-in-templates>`_)
@@ -82,7 +72,7 @@ Example:
 .. code-block:: python
 
     # settings.py
-    GRAPPLE = {
+    WAGTAIL_NINJA = {
         # ...
         "ALLOWED_IMAGE_FILTERS": [
             "width-1000",
@@ -152,7 +142,7 @@ Wagtail model interfaces
 Used to construct the schema for Wagtail Page-derived models. It can be overridden to provide a custom interface for all
 page models.
 
-Default: ``grapple.types.interfaces.PageInterface``
+Default: ``wagtail_ninja.types.interfaces.PageInterface``
 
 
 .. _snippet interface setting:
@@ -163,4 +153,4 @@ Default: ``grapple.types.interfaces.PageInterface``
 Used to construct the schema for Wagtail snippet models. It can be overridden to provide a custom interface for all
 snippet models.
 
-Default: ``grapple.types.interfaces.SnippetInterface``
+Default: ``wagtail_ninja.types.interfaces.SnippetInterface``

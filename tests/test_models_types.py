@@ -6,10 +6,10 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from grapple import registry
-from grapple.actions import get_field_type
-from grapple.exceptions import IllegalDeprecation
-from grapple.models import (
+from wagtail_ninja import registry
+from wagtail_ninja.actions import get_field_type
+from wagtail_ninja.exceptions import IllegalDeprecation
+from src.wagtail_ninja.models import (
     GraphQLCollection,
     GraphQLField,
     GraphQLForeignKey,
@@ -17,8 +17,8 @@ from grapple.models import (
     GraphQLStreamfield,
     GraphQLString,
 )
-from grapple.types.streamfield import StreamFieldInterface
-from grapple.types.structures import BasePaginatedType, QuerySetList
+from src.wagtail_ninja.schemas.streamfield import StreamFieldInterface
+from wagtail_ninja.schemas.structures import BasePaginatedType, QuerySetList
 
 
 class FieldTest(TestCase):
@@ -129,7 +129,7 @@ class FieldTest(TestCase):
             description=self.description,
             deprecation_reason=self.deprecation_reason,
         )()
-        # Use get_field_type to replicate behavior of grapple.actions.load_type_fields
+        # Use get_field_type to replicate behavior of wagtail_ninja.actions.load_type_fields
         field, field_wrapper = get_field_type(field)
         # Assert field_wrapper type is List
         self.assertIsInstance(field_wrapper, graphene.List)
@@ -142,7 +142,7 @@ class FieldTest(TestCase):
             description=self.description,
             deprecation_reason=self.deprecation_reason,
         )()
-        # Use get_field_type to replicate behavior of grapple.actions.load_type_fields
+        # Use get_field_type to replicate behavior of wagtail_ninja.actions.load_type_fields
         field, field_wrapper = get_field_type(field)
         # Assert field_wrapper type is QuerySetList
         self.assertIsInstance(field_wrapper, QuerySetList)
@@ -155,7 +155,7 @@ class FieldTest(TestCase):
             description=self.description,
             deprecation_reason=self.deprecation_reason,
         )()
-        # Use get_field_type to replicate behavior of grapple.actions.load_type_fields
+        # Use get_field_type to replicate behavior of wagtail_ninja.actions.load_type_fields
         field, field_wrapper = get_field_type(field)
         # Assert field_wrapper type is QuerySetList
         self.assertIsInstance(field_wrapper, QuerySetList)
@@ -170,7 +170,7 @@ class FieldTest(TestCase):
             description=self.description,
             deprecation_reason=self.deprecation_reason,
         )()
-        # Use get_field_type to replicate behavior of grapple.actions.load_type_fields
+        # Use get_field_type to replicate behavior of wagtail_ninja.actions.load_type_fields
         field, field_wrapper = get_field_type(field)
         # Assert field_wrapper type is Field and issubclass of BasePaginatedType
         self.assertIsInstance(field_wrapper, graphene.Field)

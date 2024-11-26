@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "wagtail_headless_preview",
-    # GRAPPLE SPECIFIC MODULES
-    "grapple",
-    "graphene_django",
+    # WAGTAIL_NINJA SPECIFIC MODULES
+    "wagtail_ninjaninja",
+    "ninja_extra",
+    "wagtail_ninja"
 ]
 
 if WAGTAIL_VERSION >= (6, 0):
@@ -161,13 +162,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # Grapple Config:
 GRAPHENE = {
-    "SCHEMA": "grapple.schema.schema",
-    "MIDDLEWARE": ["grapple.middleware.GrappleMiddleware"],
+    "SCHEMA": "wagtail_ninja.schema.schema",
+    "MIDDLEWARE": ["wagtail_ninja.middleware.GrappleMiddleware"],
 }
 
-# GRAPPLE_EXPOSE_GRAPHIQL = True
+# WAGTAIL_NINJA_EXPOSE_GRAPHIQL = True
 
-GRAPPLE = {
+WAGTAIL_NINJA = {
     "APPS": ["testapp"],
     "ADD_SEARCH_HIT": True,
     "EXPOSE_GRAPHIQL": True,
