@@ -1,0 +1,1 @@
+{"properties":{"type":{"title":"Type","type":"string"},"detail_url":{"title":"Detail Url","type":"string"},"html_url":{"title":"Html Url","type":"string"}},"required":["type","detail_url","html_url"],"title":"PageParentMeta","type":"object","x-readme-ref-name":"PageParentMeta"}

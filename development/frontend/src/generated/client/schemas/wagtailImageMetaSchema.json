@@ -1,0 +1,1 @@
+{"properties":{"type":{"title":"Type","type":"string"},"download_url":{"title":"Download Url","type":"string"}},"required":["type","download_url"],"title":"WagtailImageMetaSchema","type":"object","x-readme-ref-name":"WagtailImageMetaSchema"}

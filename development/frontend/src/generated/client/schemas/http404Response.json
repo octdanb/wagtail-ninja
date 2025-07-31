@@ -1,0 +1,1 @@
+{"properties":{"detail":{"title":"Detail","type":"string"}},"required":["detail"],"title":"Http404Response","type":"object","x-readme-ref-name":"Http404Response"}

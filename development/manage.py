@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+import os
+import sys
+
+if __name__ == '__main__':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings.development')
+    from django.core.management import execute_from_command_line
+
+    if (
+        os.environ.get("DJANGO_SETTINGS_MODULE") == "app.settings.development"
+        and len(sys.argv) > 1
+        and sys.argv[1] == "runserver"
+    ):
+        if os.environ.get("RUN_MAIN") == "true":
+            from app.settings.development import WAGTAILADMIN_BASE_URL
+            print(f"Starting django on {WAGTAILADMIN_BASE_URL}")
+            print(f"Running API docs on {WAGTAILADMIN_BASE_URL}/api/wagtail/v3/docs")
+
+    execute_from_command_line(sys.argv)
