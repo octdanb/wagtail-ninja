@@ -5,7 +5,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 export default defineConfig({
   appType: 'spa',
   server: {
-    host: '0.0.0.0',
+    host: 'wagtail-ninja-frontend',
     port: 3000,
     proxy: {
       '/api': 'http://wagtail-ninja-django:8000',

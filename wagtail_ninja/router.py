@@ -24,6 +24,7 @@ from ._django_ninja_patch import apply_django_ninja_operation_result_to_response
 
 apply_django_ninja_operation_result_to_response_patch()
 
+all_page_schemas = create_pages_schemas()
 
 class Http404Response(Schema):
     detail: str
@@ -102,6 +103,8 @@ def get_page_wrapper_fn(all_page_schemas: dict[type[Page], type[ModelSchema]]):
 
 
 def find_page(request: HttpRequest, html_path, locale=None):
+    all_schemas = all_page_schemas.values()
+    type WagtailPages = functools.reduce(operator.or_, all_schemas)
     site = Site.find_for_request(request)
     if not site:
         raise Http404("No site found")
@@ -126,8 +129,14 @@ def find_page(request: HttpRequest, html_path, locale=None):
     if not get_base_queryset(request).order_by("id").filter(id=page.id).exists():
         raise Http404("Page not found")
 
-    # TODO not a great solution
-    return redirect(request.build_absolute_uri(f"../{page.id}/"))
+    schema_page = None
+    for page_type, schema in all_page_schemas.items():
+        if type(page) is page_type:
+            schema_page = schema.from_orm(page, context={"request": request})
+
+    if schema_page:
+        return schema_page
+    return BasePageDetailSchema.from_orm(page, context={"request": request})
 
 
 def get_page_preview(request: HttpRequest, content_type, token):
@@ -154,27 +163,30 @@ class WagtailNinjaPagesRouter(Router):
         self._autodetect()
 
     def _autodetect(self, **kwargs):
-        all_page_schemas = create_pages_schemas()
         all_schemas = all_page_schemas.values()
         type WagtailPages = functools.reduce(operator.or_, all_schemas)
 
         self.add_api_operation(
-            "/", ["GET"], list_pages, response=list[BasePageModelSchema]
+            "/", ["GET"], list_pages, response=list[BasePageModelSchema],
+            operation_id="list_pages"
         )
         self.add_api_operation(
             "/find/",
             ["GET"],
             find_page,
-            response={301: None, 302: None, 404: Http404Response},
+            response={200: WagtailPages, 302: None, 404: Http404Response},
+            operation_id="find_page"
         )
         self.add_api_operation(
-            "/preview/", ["GET"], get_page_preview, response=WagtailPages
+            "/preview/", ["GET"], get_page_preview, response=WagtailPages,
+            operation_id="preview_page"
         )
         self.add_api_operation(
             "/{page_id}/",
             ["GET"],
             get_page_wrapper_fn(all_page_schemas),
             response=WagtailPages,
+            operation_id="get_page_by_id"
         )
 
 

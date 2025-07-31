@@ -4,3 +4,4 @@ dist/
 .idea/
 __pycache__
 node_modules
+development/media/

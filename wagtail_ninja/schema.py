@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional
 
 from ninja import ModelSchema, Schema
 from pydantic import Field, RootModel
@@ -101,17 +101,21 @@ class BasePageDetailSchema(BasePageModelSchema):
     @staticmethod
     def resolve_meta(page: Page, context) -> PageDetailMeta:
         # can't inherit from superclass. clashes somehow.
-
         prnt = page.get_parent()
         if prnt and not prnt.is_root():
             parent = PageParent.from_page(prnt, context)
         else:
             parent = None
+        try:
+            html_url = get_full_url(context["request"], page.get_url(context["request"]))
+        except Exception as e:
+            print(e)
+            html_url = "/error"
 
         return PageDetailMeta(
             type=page.specific_class._meta.label,
             detail_url=get_full_url(context["request"], context["request"].path),
-            html_url=get_full_url(context["request"], page.get_url(context["request"])),
+            html_url=html_url,
             slug=page.slug,
             first_published_at=page.first_published_at,
             last_published_at=page.last_published_at,

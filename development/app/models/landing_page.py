@@ -7,15 +7,11 @@ from wagtail.fields import RichTextField, StreamField
 import wagtail.blocks as wagtail_blocks
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 from wagtail.search import index
-from app.mixins.headless_wagtail_preview import HeadlessWagtailPreview
+from app.mixins.headless_wagtail_preview import HeadlessMixin
 
 
-class LandingPage(HeadlessWagtailPreview, Page):
-    api_fields = ["extra_title", "content"]
-
-    extra_title = RichTextField()
-    body = RichTextField()
-
+class LandingPage(HeadlessMixin, Page):
+    api_fields = ["content"]
 
     content = StreamField(
         [
@@ -32,23 +28,16 @@ class LandingPage(HeadlessWagtailPreview, Page):
 
 
     # Search index configuration
-    search_fields = Page.search_fields + [
-        index.SearchField('body'),
-    ]
-
-
+    search_fields = Page.search_fields
     # Editor panels configuration
 
     content_panels = Page.content_panels + [
-        FieldPanel('extra_title'),
-        FieldPanel('body'),
         FieldPanel('content'),
     ]
 
-    promote_panels = [
-    ]
+    promote_panels = [] + Page.promote_panels
 
 
     # Parent page / subpage type rules
     # parent_page_types = ['blog.BlogIndex']
-    subpage_types = []
+    subpage_types = ['app.LandingPage', 'app.BlogPage']

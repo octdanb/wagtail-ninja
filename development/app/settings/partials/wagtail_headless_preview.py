@@ -1,4 +1,4 @@
-WEB_SITE_ROOT_URL = "http://0.0.0.0:8000"
+WEB_SITE_ROOT_URL = "http://localhost:3000/preview/"
 
 WAGTAIL_HEADLESS_PREVIEW = {
     "SERVE_BASE_URL": WEB_SITE_ROOT_URL,
