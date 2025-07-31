@@ -5,7 +5,7 @@
 
 import type { Http404Response } from './Http404Response.ts'
 
-export type GetPageByPathQueryParams = {
+export type FindPageQueryParams = {
   /**
    * @type string
    */
@@ -19,22 +19,22 @@ export type GetPageByPathQueryParams = {
 /**
  * @description Moved Permanently
  */
-export type GetPageByPath301 = any
+export type FindPage301 = any
 
 /**
  * @description Found
  */
-export type GetPageByPath302 = any
+export type FindPage302 = any
 
 /**
  * @description Not Found
  */
-export type GetPageByPath404 = Http404Response
+export type FindPage404 = Http404Response
 
-export type GetPageByPathQueryResponse = any
+export type FindPageQueryResponse = any
 
-export type GetPageByPathQuery = {
+export type FindPageQuery = {
   Response: any
-  QueryParams: GetPageByPathQueryParams
-  Errors: GetPageByPath404
+  QueryParams: FindPageQueryParams
+  Errors: FindPage404
 }

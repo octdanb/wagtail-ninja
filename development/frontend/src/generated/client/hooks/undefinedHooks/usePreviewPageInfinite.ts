@@ -4,23 +4,23 @@
  */
 
 import fetch from '@kubb/plugin-client/clients/axios'
-import type { PreviewQueryResponse, PreviewQueryParams } from '../../types/Preview.ts'
+import type { PreviewPageQueryResponse, PreviewPageQueryParams } from '../../types/PreviewPage.ts'
 import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 import type { InfiniteData, QueryKey, QueryClient, InfiniteQueryObserverOptions, UseInfiniteQueryResult } from '@tanstack/react-query'
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query'
 
-export const previewInfiniteQueryKey = (params: PreviewQueryParams) => [{ url: '/api/wagtail/v3/pages/preview/' }, ...(params ? [params] : [])] as const
+export const previewPageInfiniteQueryKey = (params: PreviewPageQueryParams) => [{ url: '/api/wagtail/v3/pages/preview/' }, ...(params ? [params] : [])] as const
 
-export type PreviewInfiniteQueryKey = ReturnType<typeof previewInfiniteQueryKey>
+export type PreviewPageInfiniteQueryKey = ReturnType<typeof previewPageInfiniteQueryKey>
 
 /**
  * @summary Get Page Preview
  * {@link /api/wagtail/v3/pages/preview/}
  */
-export async function previewInfinite(params: PreviewQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
+export async function previewPageInfinite(params: PreviewPageQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const { client: request = fetch, ...requestConfig } = config
 
-  const res = await request<PreviewQueryResponse, ResponseErrorConfig<Error>, unknown>({
+  const res = await request<PreviewPageQueryResponse, ResponseErrorConfig<Error>, unknown>({
     method: 'GET',
     url: `/api/wagtail/v3/pages/preview/`,
     params,
@@ -29,18 +29,18 @@ export async function previewInfinite(params: PreviewQueryParams, config: Partia
   return res.data
 }
 
-export function previewInfiniteQueryOptions(params: PreviewQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
-  const queryKey = previewInfiniteQueryKey(params)
-  return infiniteQueryOptions<PreviewQueryResponse, ResponseErrorConfig<Error>, PreviewQueryResponse, typeof queryKey, number>({
+export function previewPageInfiniteQueryOptions(params: PreviewPageQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
+  const queryKey = previewPageInfiniteQueryKey(params)
+  return infiniteQueryOptions<PreviewPageQueryResponse, ResponseErrorConfig<Error>, PreviewPageQueryResponse, typeof queryKey, number>({
     enabled: !!params,
     queryKey,
     queryFn: async ({ signal, pageParam }) => {
       config.signal = signal
 
       if (params) {
-        params['page'] = pageParam as unknown as PreviewQueryParams['page']
+        params['page'] = pageParam as unknown as PreviewPageQueryParams['page']
       }
-      return previewInfinite(params, config)
+      return previewPageInfinite(params, config)
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, _allPages, lastPageParam) => (Array.isArray(lastPage) && lastPage.length === 0 ? undefined : lastPageParam + 1),
@@ -52,23 +52,23 @@ export function previewInfiniteQueryOptions(params: PreviewQueryParams, config: 
  * @summary Get Page Preview
  * {@link /api/wagtail/v3/pages/preview/}
  */
-export function usePreviewInfinite<
-  TData = InfiniteData<PreviewQueryResponse>,
-  TQueryData = PreviewQueryResponse,
-  TQueryKey extends QueryKey = PreviewInfiniteQueryKey,
+export function usePreviewPageInfinite<
+  TData = InfiniteData<PreviewPageQueryResponse>,
+  TQueryData = PreviewPageQueryResponse,
+  TQueryKey extends QueryKey = PreviewPageInfiniteQueryKey,
 >(
-  params: PreviewQueryParams,
+  params: PreviewPageQueryParams,
   options: {
-    query?: Partial<InfiniteQueryObserverOptions<PreviewQueryResponse, ResponseErrorConfig<Error>, TData, TQueryKey>> & { client?: QueryClient }
+    query?: Partial<InfiniteQueryObserverOptions<PreviewPageQueryResponse, ResponseErrorConfig<Error>, TData, TQueryKey>> & { client?: QueryClient }
     client?: Partial<RequestConfig> & { client?: typeof fetch }
   } = {},
 ) {
   const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? previewInfiniteQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? previewPageInfiniteQueryKey(params)
 
   const query = useInfiniteQuery(
     {
-      ...previewInfiniteQueryOptions(params, config),
+      ...previewPageInfiniteQueryOptions(params, config),
       queryKey,
       ...queryOptions,
     } as unknown as InfiniteQueryObserverOptions,

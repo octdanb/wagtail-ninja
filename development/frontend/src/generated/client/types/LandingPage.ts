@@ -4,6 +4,7 @@
  */
 
 import type { PageDetailMeta } from './PageDetailMeta.ts'
+import type { StreamField } from './StreamField.ts'
 
 export type LandingPage = {
   /**
@@ -26,7 +27,7 @@ export type LandingPage = {
    */
   extra_title: string
   /**
-   * @type string
+   * @type array
    */
-  body: string
+  content: StreamField
 }

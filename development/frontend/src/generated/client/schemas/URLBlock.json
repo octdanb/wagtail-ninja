@@ -1,0 +1,1 @@
+{"properties":{"type":{"const":"url_block","title":"Type","type":"string"},"value":{"title":"Value"},"id":{"format":"uuid","title":"Id","type":"string"}},"required":["type","value","id"],"title":"URLBlock","type":"object","x-readme-ref-name":"URLBlock"}

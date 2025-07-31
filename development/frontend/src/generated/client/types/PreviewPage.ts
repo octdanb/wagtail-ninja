@@ -5,7 +5,7 @@
 
 import type { WagtailPages } from './WagtailPages.ts'
 
-export type PreviewQueryParams = {
+export type PreviewPageQueryParams = {
   /**
    * @type string
    */
@@ -19,12 +19,12 @@ export type PreviewQueryParams = {
 /**
  * @description OK
  */
-export type Preview200 = WagtailPages
+export type PreviewPage200 = WagtailPages
 
-export type PreviewQueryResponse = Preview200
+export type PreviewPageQueryResponse = PreviewPage200
 
-export type PreviewQuery = {
-  Response: Preview200
-  QueryParams: PreviewQueryParams
+export type PreviewPageQuery = {
+  Response: PreviewPage200
+  QueryParams: PreviewPageQueryParams
   Errors: any
 }
