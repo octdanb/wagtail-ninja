@@ -1,9 +1,12 @@
 import os
+from operator import truediv
+
 from .partials.templates import *
 from .partials.postgres import *
 from .partials.static import *
 from .partials.wagtail_headless_preview import  *
 
+WAGTAIL_NINJA_TYPE_STREAMFIELDBLOCKS = True
 
 SECRET_KEY = "supersecretkey"
 WAGTAILADMIN_BASE_URL = "http://0.0.0.0:8000"
