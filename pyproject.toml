@@ -18,3 +18,7 @@ dev = [
     "wagtail>=7.0.1",
     "wagtail-headless-preview>=0.8.0",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
